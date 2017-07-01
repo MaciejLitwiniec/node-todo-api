@@ -1,4 +1,15 @@
-const MongoClient = require('mongodb').MongoClient;
+
+// //ES6 functionality
+// //object destructuring allows to pull out properties from object creating variables
+// var user = {name: 'Maciej', age: 29};
+// var {name} = user;
+// console.log(name);
+
+// const MongoClient = require('mongodb').MongoClient;
+const {MongoClient, ObjectID} = require('mongodb');
+
+// var obj = new ObjectID();
+// console.log(obj);
 
 MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   if (err) {
@@ -23,17 +34,22 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //   console.log(JSON.stringify(result.ops, undefined, 2));
   // });
 
-  db.collection('Users').insertOne({
-    name: 'Maciej',
-    age: 29,
-    location: 'Warsaw'
-  }, (err, result) => {
-    if (err) {
-      return console.log('Unable to insert Users', err);
-    }
-    console.log(JSON.stringify(result.ops, undefined, 2));
-  });
+  // db.collection('Users').insertOne({
+  //   //_id: '123',
+  //   name: 'Maciej',
+  //   age: 29,
+  //   location: 'Warsaw'
+  // }, (err, result) => {
+  //   if (err) {
+  //     return console.log('Unable to insert Users', err);
+  //   }
+  //   // console.log(JSON.stringify(result.ops, undefined, 2));
+  //   // console.log(JSON.stringify(result.ops[0]._id));
+  //   console.log(JSON.stringify(result.ops[0]._id.getTimestamp()));
+  // });
+
+
 
   //close connection with server
-  db.close()
+  db.close();
 });
