@@ -5,19 +5,32 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/TodoApp');
 
 
-//so the mongoose knows how to store data
+//Model - so the mongoose knows how to store data
+//we utilize mongoose schemas and validators
 var Todo = mongoose.model('Todo', {
   text: {
-    type: String
+    type: String,
+    required: true,
+    minlength: 1,
+    //trim deletes spaces at the beginning and end of String
+    //validates if String is not composed of spaces only
+    trim: true
   },
   completed: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   completedAt: {
-    type: Number
+    type: Number,
+    default: null
   }
 });
-//
+
+
+//create new user with email property and without
+//user should showup in Users collection
+
+
 // var newTodo = new Todo({
 //   text: 'Cook dinner'
 // });
@@ -30,14 +43,33 @@ var Todo = mongoose.model('Todo', {
 // });
 
 
-var newerToDo = new Todo({
-  text: 'walk the dog',
-  completed: true,
-  completedAt: 123
+// var newerToDo = new Todo({
+//   text: 'walk the dog',
+//   //completed: true,
+//   //completedAt: 123
+// });
+//
+// newerToDo.save().then((doc) => {
+//   console.log(JSON.stringify(doc, undefined, 2));
+// }, (e) => {
+//   console.log('unable to save todo', e);
+// });
+
+var User = mongoose.model('User', {
+  email: {
+    type: String,
+    required: true,
+    minlength: 1,
+    trim: true
+  }
 });
 
-newerToDo.save().then((doc) => {
-  console.log(JSON.stringify(doc, undefined, 2));
-}, (e) => {
-  console.log('unable to save todo', e);
+var newUser = new User({
+  email: ' test@test.com '
 });
+
+newUser.save().then((usr) => {
+  console.log('New user saved to DB', usr);
+}, (e) => {
+  console.log('Unable to save user');
+})
