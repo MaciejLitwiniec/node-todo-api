@@ -1,75 +1,19 @@
-var mongoose = require('mongoose');
+var express = require('express');
+var bodyParser = require('body-parser');
 
-//to 'inform' mongoose that we will use JS built-in Promise
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+var {mongoose} = require('./db/mongoose');
+var {Todo} = require('./models/todo');
+var {User} = require('./models/user');
 
+var app = express();
 
-//Model - so the mongoose knows how to store data
-//we utilize mongoose schemas and validators
-var Todo = mongoose.model('Todo', {
-  text: {
-    type: String,
-    required: true,
-    minlength: 1,
-    //trim deletes spaces at the beginning and end of String
-    //validates if String is not composed of spaces only
-    trim: true
-  },
-  completed: {
-    type: Boolean,
-    default: false
-  },
-  completedAt: {
-    type: Number,
-    default: null
-  }
+app.use(bodyParser.json());
+
+app.post('/todos', (req, res) => {
+  console.log(req.body);
 });
 
 
-//create new user with email property and without
-//user should showup in Users collection
-
-
-// var newTodo = new Todo({
-//   text: 'Cook dinner'
-// });
-//
-// //saving with premise
-// newTodo.save().then((doc) => {
-//   console.log('Saved todo', doc);
-// }, (e) => {
-//     console.log('Unable to save todo');
-// });
-
-
-// var newerToDo = new Todo({
-//   text: 'walk the dog',
-//   //completed: true,
-//   //completedAt: 123
-// });
-//
-// newerToDo.save().then((doc) => {
-//   console.log(JSON.stringify(doc, undefined, 2));
-// }, (e) => {
-//   console.log('unable to save todo', e);
-// });
-
-var User = mongoose.model('User', {
-  email: {
-    type: String,
-    required: true,
-    minlength: 1,
-    trim: true
-  }
+app.listen(3000, () => {
+  console.log('started on port 3000');
 });
-
-var newUser = new User({
-  email: ' test@test.com '
-});
-
-newUser.save().then((usr) => {
-  console.log('New user saved to DB', usr);
-}, (e) => {
-  console.log('Unable to save user');
-})
