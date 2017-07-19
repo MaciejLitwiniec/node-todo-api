@@ -107,6 +107,12 @@ app.patch('/todos/:id', (req, res) => {
 });
 
 
+//http POST /users
+//it should use the patterns from creating new todo
+//.pick should be used for email and password
+//call save?
+//1. stop server 2. wipe todoapp db, start server
+
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);
 });
