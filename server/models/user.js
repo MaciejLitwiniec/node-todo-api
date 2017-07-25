@@ -54,6 +54,7 @@ UserSchema.methods.toJSON = function() {
 };
 
 //custom method
+//.methods - everything you add onto it turns into instance methods
 UserSchema.methods.generateAuthToken = function() {
   var user = this;
   var access = 'auth';
@@ -69,6 +70,27 @@ UserSchema.methods.generateAuthToken = function() {
   });
 };
 
+//.statics - everything you add onto it turns into model methods
+//unlike the other methods it takes an argument 'token' with which will search
+//Model methods are called with Uppercase: User object
+UserSchema.statics.findByToken = function (token) {
+  var User = this;
+  var decoded;
+
+  try {
+    decoded = jwt.verify(token, 'abc123');
+  } catch (e) {
+    return Promise.reject();
+  }
+
+  //by adding return we will be able to chain '.then' when calling the findByToken method
+  //we use 'tokens.token' to query nested document (when . is in a key)
+  return User.findOne({
+    '_id': decoded._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  });
+};
 
 var User = mongoose.model('User', UserSchema);
 

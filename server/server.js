@@ -8,6 +8,8 @@ const {ObjectID} = require('mongodb');
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
+var {authenticate} = require('./middleware/authenticate');
+
 
 var app = express();
 const port = process.env.PORT;
@@ -116,14 +118,9 @@ app.post('/users', (req, res) => {
   //Model methods are called with Uppercase: User object
   //Instance methods are called with lower case: individual user
 
-  // //findByToken is a custom method
-  // //will take a token from request, search for this user and return the user to caller
-  // User.findByToken
-  //
-  // //generateAuthToken is responsible for adding a token to individual user doc
-  // user.generateAuthToken
   user.save().then(() => {
     //res.send(user);
+    //generateAuthToken is responsible for adding a token to individual user doc
     return user.generateAuthToken();
   }).then((token) => {
     //sending token in http header
@@ -135,6 +132,10 @@ app.post('/users', (req, res) => {
   })
 });
 
+//first private route with middleware 'authenticate'
+app.get('/users/me', authenticate, (req, res) => {
+  res.send(req.user);
+});
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);
