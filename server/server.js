@@ -106,12 +106,35 @@ app.patch('/todos/:id', (req, res) => {
   });
 });
 
-
 //http POST /users
-//it should use the patterns from creating new todo
-//.pick should be used for email and password
-//call save?
-//1. stop server 2. wipe todoapp db, start server
+//SIGN IN
+app.post('/users', (req, res) => {
+  var body = _.pick(req.body, ['email', 'password']);
+  var user = new User(body);
+
+  //Model methods & Instance methods
+  //Model methods are called with Uppercase: User object
+  //Instance methods are called with lower case: individual user
+
+  // //findByToken is a custom method
+  // //will take a token from request, search for this user and return the user to caller
+  // User.findByToken
+  //
+  // //generateAuthToken is responsible for adding a token to individual user doc
+  // user.generateAuthToken
+  user.save().then(() => {
+    //res.send(user);
+    return user.generateAuthToken();
+  }).then((token) => {
+    //sending token in http header
+    //header is key-value pair
+    //when header is prefixed with x- it tells its a custome header
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  })
+});
+
 
 app.listen(port, () => {
   console.log(`Listening on port: ${port}`);
