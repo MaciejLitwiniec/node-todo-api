@@ -1,5 +1,27 @@
 const {SHA256} = require('crypto-js');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+
+// PLAYGROUND PART III
+
+var password = 'abc123!';
+
+bcrypt.genSalt(10, (err, salt) => {
+  bcrypt.hash(password, salt, (err, hash) => {
+    console.log(hash);
+  });
+});
+
+var hashedPassword = '$2a$10$AHpTksEC/DX.g/kPOGTftecmcdDymECk2RWoahR2K/C/nDPYSp/Jq';
+
+//res returns false if password doesnt match and true if it is
+bcrypt.compare(password, hashedPassword, (err, res) => {
+  console.log(res);
+});
+
+
+//======================================================================
 
 // PLAYGROUND PART II
 //takes and object (user id) with secret and signs it (creating hash), then returns token
@@ -7,16 +29,16 @@ const jwt = require('jsonwebtoken');
 
 //takes token and secret and makes sure that data was not manipulated
 //jwt.verify
-
-var data = {
-  id: 10
-}
-// this we will send to the user when he will sign up, or login
-var token = jwt.sign(data, '123abc');
-console.log(token);
-
-var decoded = jwt.verify(token, '123abc');
-console.log('decoded: ', decoded);
+//
+// var data = {
+//   id: 10
+// }
+// // this we will send to the user when he will sign up, or login
+// var token = jwt.sign(data, '123abc');
+// console.log(token);
+//
+// var decoded = jwt.verify(token, '123abc');
+// console.log('decoded: ', decoded);
 
 
 //======================================================================

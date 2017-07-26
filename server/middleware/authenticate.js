@@ -4,7 +4,7 @@ var {User} = require('./../models/user')
 var authenticate = (req, res, next) => {
   //note req.
   //'x-auth' to capture the header
-  var token = req.header('x-auth')
+  var token = req.header('x-auth');
 
   //will take a token from request,
   //search for this user and return the user to caller
