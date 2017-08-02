@@ -72,6 +72,20 @@ UserSchema.methods.generateAuthToken = function() {
   });
 };
 
+
+UserSchema.methods.removeToken = function(token) {
+  var user = this;
+
+  //$pull is mongodb operator. Pulls lets remove items from array that match certain criteria
+  return user.update({
+    $pull: {
+      tokens: {
+        token: token
+      }
+    }
+  });
+};
+
 //.statics - everything you add onto it turns into model methods
 //unlike the other methods it takes an argument 'token' with which will search
 //Model methods are called with Uppercase: User object
